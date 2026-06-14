@@ -13,8 +13,6 @@ const {
   ALGORITHMS,
 } = require('./src/index');
 
-// ── Args parser ─────────────────────────────────────────────────────────
-
 function parseArgs(argv) {
   const args = { _: [], flags: {} };
   for (let i = 0; i < argv.length; i++) {
@@ -56,15 +54,12 @@ function parseArgs(argv) {
     } else if (arg === 'list') {
       args.command = 'list';
     } else if (arg.startsWith('-')) {
-      // Unknown flag, skip
     } else {
       args._.push(arg);
     }
   }
   return args;
 }
-
-// ── Help ────────────────────────────────────────────────────────────────
 
 function showHelp() {
   console.log(`hashdir — content-hash directory trees
@@ -102,8 +97,6 @@ Examples:
   hashdir . -i node_modules,.git        Ignore common directories
 `);
 }
-
-// ── Main ────────────────────────────────────────────────────────────────
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
