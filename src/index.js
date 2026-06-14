@@ -4,8 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// ── File reading with normalize ──────────────────────────────────────────
-
 function readFileContent(filePath, normalize) {
   let content = fs.readFileSync(filePath);
   if (normalize) {
@@ -16,14 +14,11 @@ function readFileContent(filePath, normalize) {
     text = text.replace(/[ \t]+$/gm, '');
     // Strip trailing newlines
     text = text.replace(/\n+$/, '');
-    // Ensure trailing newline
     text += '\n';
     content = Buffer.from(text, 'utf-8');
   }
   return content;
 }
-
-// ── Collect files ────────────────────────────────────────────────────────
 
 function collectFiles(dir, options = {}) {
   const {
@@ -55,16 +50,13 @@ function collectFiles(dir, options = {}) {
       const name = entry.name;
       const fullPath = path.join(currentDir, name);
 
-      // Skip dotfiles unless enabled
       if (!dotfiles && name.startsWith('.')) continue;
 
-      // Check ignore patterns (simple string/glob match)
       if (ignoreSet.has(name)) continue;
 
       if (entry.isDirectory()) {
         walk(fullPath, depth + 1);
       } else if (entry.isFile()) {
-        // Check extension filter
         if (extSet.size > 0) {
           const ext = path.extname(name);
           if (!extSet.has(ext)) continue;
@@ -73,7 +65,6 @@ function collectFiles(dir, options = {}) {
         const rel = path.relative(dir, fullPath);
         results.push({ path: rel, fullPath });
       }
-      // Optionally follow symlinks
       else if (followLinks && entry.isSymbolicLink()) {
         try {
           const real = fs.realpathSync(fullPath);
@@ -99,8 +90,6 @@ function collectFiles(dir, options = {}) {
   return results;
 }
 
-// ── Hash functions ───────────────────────────────────────────────────────
-
 const ALGORITHMS = ['sha256', 'sha1', 'md5', 'sha512', 'blake2b512', 'sha384'];
 
 function isValidAlgorithm(algo) {
@@ -110,8 +99,6 @@ function isValidAlgorithm(algo) {
 function hashContent(content, algorithm = 'sha256') {
   return crypto.createHash(algorithm).update(content).digest('hex');
 }
-
-// ── Directory hashing ───────────────────────────────────────────────────
 
 /**
  * Hash a directory tree.
@@ -181,8 +168,6 @@ function hashDirectory(dir, options = {}) {
   return result;
 }
 
-// ── Diff two directories ────────────────────────────────────────────────
-
 /**
  * Compare two directory trees by content hash.
  * @param {string} dirA - First directory
@@ -203,14 +188,12 @@ function diffDirectories(dirA, dirB, options = {}) {
   const modified = [];
   const unchanged = [];
 
-  // Files in B but not in A
   for (const [p, f] of mapB) {
     if (!mapA.has(p)) {
       added.push({ path: p, hash: f.hash, size: f.size });
     }
   }
 
-  // Files in A
   for (const [p, f] of mapA) {
     if (!mapB.has(p)) {
       removed.push({ path: p, hash: f.hash, size: f.size });
@@ -241,8 +224,6 @@ function diffDirectories(dirA, dirB, options = {}) {
   };
 }
 
-// ── Watch mode (hash poll) ──────────────────────────────────────────────
-
 /**
  * Poll a directory for content changes.
  * @param {string} dir - Directory to watch
@@ -267,13 +248,11 @@ function watchDirectory(dir, callback, options = {}) {
     }
   }, interval);
 
-  // Initial check
   try {
     const result = hashDirectory(dir, hashOpts);
     lastHash = result.hash;
     callback({ hash: result.hash, fileCount: result.fileCount, changed: false, totalSize: result.totalSize });
   } catch {
-    // empty
   }
 
   return {
@@ -283,8 +262,6 @@ function watchDirectory(dir, callback, options = {}) {
     },
   };
 }
-
-// ── Format helpers ──────────────────────────────────────────────────────
 
 function formatText(result) {
   let out = `Hash:       ${result.hash}\n`;
