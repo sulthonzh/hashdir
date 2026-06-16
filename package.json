@@ -1,5 +1,5 @@
 {
-  "name": "hashdir",
+  "name": "@quadbyte/hashdir",
   "version": "1.0.0",
   "description": "Content-hash entire directory trees — zero deps. Perfect for CI cache keys, build verification, and change detection.",
   "main": "src/index.js",
@@ -9,5 +9,8 @@
   "author": "sulthonzh",
   "license": "MIT",
   "engines": { "node": ">=16" },
-  "files": ["cli.js", "src/"]
+  "files": ["cli.js", "src/"],
+  "publishConfig": {
+    "access": "public"
+  }
 }
