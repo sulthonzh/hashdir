@@ -3,14 +3,38 @@
   "version": "1.0.0",
   "description": "Content-hash entire directory trees — zero deps. Perfect for CI cache keys, build verification, and change detection.",
   "main": "src/index.js",
-  "bin": { "hashdir": "./cli.js" },
-  "scripts": { "test": "node test/test.js" },
-  "keywords": ["hash", "directory", "content-hash", "cache-key", "integrity", "build-verification"],
+  "bin": {
+    "hashdir": "./cli.js"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "hash",
+    "directory",
+    "content-hash",
+    "cache-key",
+    "integrity",
+    "build-verification"
+  ],
   "author": "sulthonzh",
   "license": "MIT",
-  "engines": { "node": ">=16" },
-  "files": ["cli.js", "src/"],
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "cli.js",
+    "src/"
+  ],
   "publishConfig": {
     "access": "public"
+  },
+  "homepage": "https://github.com/sulthonzh/hashdir#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sulthonzh/hashdir.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sulthonzh/hashdir/issues"
   }
 }
